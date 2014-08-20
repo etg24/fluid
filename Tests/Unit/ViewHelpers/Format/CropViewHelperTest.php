@@ -16,6 +16,18 @@ namespace TYPO3\Fluid\Tests\Unit\ViewHelpers\Format;
 class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 
 	/**
+	 * @var \TYPO3\Fluid\ViewHelpers\Format\CropViewHelper|\PHPUnit_Framework_MockObject_MockObject
+	 */
+	protected $viewHelper;
+
+	public function setUp() {
+		parent::setUp();
+		$this->viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
+		$this->injectDependenciesIntoViewHelper($this->viewHelper);
+		$this->viewHelper->initializeArguments();
+	}
+
+	/**
 	 * @test
 	 */
 	public function viewHelperDoesNotCropTextIfMaxCharactersIsLargerThanNumberOfCharacters() {
@@ -73,5 +85,14 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 		$viewHelper->expects($this->never())->method('renderChildren');
 		$actualResult = $viewHelper->render(8, '...', '');
 		$this->assertEquals('', $actualResult);
+	}
+
+	/**
+	 * @test
+	 */
+	public function viewHelperHandlesMultiByteValuesCorrectly() {
+		$this->viewHelper->expects($this->never())->method('renderChildren');
+		$actualResult = $this->viewHelper->render(3, '...', 'Äßütest');
+		$this->assertEquals('Äßü...', $actualResult);
 	}
 }
