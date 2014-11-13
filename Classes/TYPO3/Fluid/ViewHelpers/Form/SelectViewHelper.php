@@ -164,9 +164,15 @@ class SelectViewHelper extends AbstractFormFieldViewHelper {
 		// in case it is a multi-select, we need to register the field name
 		// as often as there are elements in the box
 		if ($this->hasArgument('multiple') && $this->arguments['multiple'] !== '') {
-			$this->renderHiddenFieldForEmptyValue();
-			for ($i = 0; $i < count($options); $i++) {
-				$this->registerFieldNameForFormTokenGeneration($name);
+			$optionsCount = count($options);
+			if ($optionsCount > 0) {
+				$this->renderHiddenFieldForEmptyValue();
+				for ($i = 0; $i < $optionsCount; $i++) {
+					$this->registerFieldNameForFormTokenGeneration($name);
+				}
+			} else {
+				// when no options are given: allow property mapping, but no indexes
+				$this->registerFieldNameForFormTokenGeneration($this->getName());
 			}
 		} else {
 			$this->registerFieldNameForFormTokenGeneration($name);
