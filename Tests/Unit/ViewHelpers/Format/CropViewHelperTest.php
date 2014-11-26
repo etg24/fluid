@@ -11,9 +11,14 @@ namespace TYPO3\Fluid\Tests\Unit\ViewHelpers\Format;
  * The TYPO3 project - inspiring people to share!                         *
  *                                                                        */
 
+require_once(__DIR__ . '/../ViewHelperBaseTestcase.php');
+
+use TYPO3\Fluid\ViewHelpers\ViewHelperBaseTestcase;
+
 /**
+ * Test for \TYPO3\Fluid\ViewHelpers\Format\CropViewHelper
  */
-class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
+class CropViewHelperTest extends ViewHelperBaseTestcase {
 
 	/**
 	 * @var \TYPO3\Fluid\ViewHelpers\Format\CropViewHelper|\PHPUnit_Framework_MockObject_MockObject
@@ -31,9 +36,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperDoesNotCropTextIfMaxCharactersIsLargerThanNumberOfCharacters() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
-		$actualResult = $viewHelper->render(50);
+		$this->viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
+		$actualResult = $this->viewHelper->render(50);
 		$this->assertEquals('some text', $actualResult);
 	}
 
@@ -41,9 +45,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperAppendsEllipsisToTruncatedText() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
-		$actualResult = $viewHelper->render(5);
+		$this->viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
+		$actualResult = $this->viewHelper->render(5);
 		$this->assertEquals('some ...', $actualResult);
 	}
 
@@ -51,9 +54,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperAppendsCustomSuffix() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
-		$actualResult = $viewHelper->render(3, '[custom suffix]');
+		$this->viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
+		$actualResult = $this->viewHelper->render(3, '[custom suffix]');
 		$this->assertEquals('som[custom suffix]', $actualResult);
 	}
 
@@ -61,9 +63,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperAppendsSuffixEvenIfResultingTextIsLongerThanMaxCharacters() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
-		$actualResult = $viewHelper->render(8);
+		$this->viewHelper->expects($this->once())->method('renderChildren')->will($this->returnValue('some text'));
+		$actualResult = $this->viewHelper->render(8);
 		$this->assertEquals('some tex...', $actualResult);
 	}
 
@@ -71,9 +72,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperUsesProvidedValueInsteadOfRenderingChildren() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->never())->method('renderChildren');
-		$actualResult = $viewHelper->render(8, '...', 'some text');
+		$this->viewHelper->expects($this->never())->method('renderChildren');
+		$actualResult = $this->viewHelper->render(8, '...', 'some text');
 		$this->assertEquals('some tex...', $actualResult);
 	}
 
@@ -81,9 +81,8 @@ class CropViewHelperTest extends \TYPO3\Flow\Tests\UnitTestCase {
 	 * @test
 	 */
 	public function viewHelperDoesNotFallbackToRenderChildNodesIfEmptyValueArgumentIsProvided() {
-		$viewHelper = $this->getMock('TYPO3\Fluid\ViewHelpers\Format\CropViewHelper', array('renderChildren'));
-		$viewHelper->expects($this->never())->method('renderChildren');
-		$actualResult = $viewHelper->render(8, '...', '');
+		$this->viewHelper->expects($this->never())->method('renderChildren');
+		$actualResult = $this->viewHelper->render(8, '...', '');
 		$this->assertEquals('', $actualResult);
 	}
 
